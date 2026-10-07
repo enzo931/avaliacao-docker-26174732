@@ -48,7 +48,7 @@ O Dockerfile original deixado pelo fornecedor era:
 
 FROM nginx:1.27-alpine
 WORKDIR /usr/share/nginx
-```[cite: 4]
+   [cite: 4]
 
 Tabela de defeitos corrigidos:
 
@@ -56,7 +56,7 @@ Tabela de defeitos corrigidos:
 |---|---|---|---|---|
 | 1 | Sem instrução COPY | O Dockerfile não copiava os arquivos do site de manutenção para dentro da imagem. | O container subia, mas ao acessar o navegador aparecia a página padrão "Welcome to nginx!" em vez da página de manutenção. | Adicionei a instrução COPY site/ /usr/share/nginx/html/ para copiar os arquivos do site. |
 | 2 | WORKDIR /usr/share/nginx | Definia o diretório de trabalho para /usr/share/nginx, alterando a estrutura padrão de execução do Nginx. | O container fechava imediatamente após subir ou apresentava erro ao carregar as configurações do Nginx. | Removi a linha WORKDIR /usr/share/nginx do Dockerfile. |
-| 3 | Sem instrução EXPOSE | A porta 80 do container não estava explicitamente declarada. | Dificuldade na documentação interna da imagem sobre qual porta o serviço escuta por padrão. | Adicionei a instrução EXPOSE 80 no Dockerfile. |
+| 3 | Sem instrução EXPOSE | A porta 80 do container não estava explicitamente declarada. | Dificuldade na documentação interna da imagem sobre qual porta o serviço escuta por padrão. | Adicionei a instrução EXPOSE 80 no Dockerfile. 
 
 6. Qual a diferença entre `-p 7042:80` e `-p 80:7042` no `docker run`? Qual dos dois números é a porta do container?
 
@@ -72,7 +72,18 @@ Porta do container: Em ambos os casos, o segundo número (após os dois pontos :
 
 7. Escreva os dois comandos `docker run` que fariam o mesmo que o seu `docker-compose.yml`.
 
+Os dois comandos equivalentes, com política de reinicialização (`--restart unless-stopped`), mapeamento de portas da sua matrícula e nomes de contêineres, são:
+
+# Comando para subir o portal:
+docker run -d --name portal --restart unless-stopped -p 8032:80 enzomanzoni001/viaserra-portal:1.0-26174732
+
+# Comando para subir a manutenção:
+docker run -d --name manutencao --restart unless-stopped -p 7032:80 manutencao:26174732
+
 8. Qual comando derruba os dois containers de uma vez?
+
+O comando é:
+docker compose down
 
 ## Verificador
 
